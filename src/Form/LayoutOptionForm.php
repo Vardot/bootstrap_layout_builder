@@ -103,7 +103,7 @@ class LayoutOptionForm extends EntityForm implements ContainerInjectionInterface
       '#title' => $this->t('Structure'),
       '#maxlength' => 255,
       '#default_value' => $option->getStructure() ?: '',
-      '#description' => $this->t('Add numbers seperated by space; if the number of columns at this layout is two and you are using bootstrap 12 Grid system<br/> this field must be two numbers at the sum of them sould equal 12. eg: <b>6 6</b> or <b>8 4</b> ...etc.'),
+      '#description' => $this->t('Add numbers separated by space; if the number of columns at this layout is two and you are using bootstrap 12 Grid system<br/> this field must be two numbers at the sum of them should equal 12. eg: <b>6 6</b> or <b>8 4</b> ...etc.'),
       '#required' => TRUE,
     ];
 
@@ -146,8 +146,7 @@ class LayoutOptionForm extends EntityForm implements ContainerInjectionInterface
   }
 
   /**
-   * AJAX callback to update the default breakpoints element when the selection
-   * changes.
+   * AJAX callback to update the default breakpoints element on change.
    *
    * @param array $form
    *   An associative array containing the structure of the form.
@@ -226,6 +225,7 @@ class LayoutOptionForm extends EntityForm implements ContainerInjectionInterface
       'entity.blb_layout.options_form',
       ['blb_layout' => $layout_id]
     );
+    return $status;
   }
 
 }

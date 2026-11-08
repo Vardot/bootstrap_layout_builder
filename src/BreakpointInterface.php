@@ -30,12 +30,12 @@ interface BreakpointInterface extends ConfigEntityInterface {
    *
    * @param string $key
    *   The position of region.
-   * @param string $strucutre_id
+   * @param string $structure_id
    *   The layout option structure id.
    *
    * @return string
    *   The class of a region.
    */
-  public function getClassByPosition($key, $strucutre_id);
+  public function getClassByPosition($key, $structure_id);
 
 }

@@ -33,7 +33,14 @@ class LayoutOptionsForm extends EntityForm {
 
     $form['layout_option']['links'] = [
       '#type' => 'table',
-      '#header' => [$this->t('Label'), $this->t('Structure'), $this->t('Breakpoints'), $this->t('Weight'), $this->t('Default Option For'), $this->t('Operations')],
+      '#header' => [
+        $this->t('Label'),
+        $this->t('Structure'),
+        $this->t('Breakpoints'),
+        $this->t('Weight'),
+        $this->t('Default Option For'),
+        $this->t('Operations'),
+      ],
       '#empty' => $this->t('No layout options available. <a href=":link">Add a layout option</a>', [':link' => Url::fromRoute('entity.blb_layout_option.add_form', ['blb_layout' => $this->entity->id()])->toString()]),
       '#attributes' => ['id' => 'layout_option'],
       '#tabledrag' => [
@@ -56,7 +63,7 @@ class LayoutOptionsForm extends EntityForm {
         '#type' => 'label',
         '#title' => $option->getStructure(),
       ];
-      $form['layout_option']['links'][$id]['breakpoins'] = [
+      $form['layout_option']['links'][$id]['breakpoints'] = [
         '#type' => 'label',
         '#title' => implode(', ', $option->getBreakpointsLabels()),
       ];
@@ -115,6 +122,7 @@ class LayoutOptionsForm extends EntityForm {
       $option->save();
     }
     $this->messenger()->addStatus($this->t('The layout options has been updated.'));
+    return SAVED_UPDATED;
   }
 
 }

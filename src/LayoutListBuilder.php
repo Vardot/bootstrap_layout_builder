@@ -2,6 +2,7 @@
 
 namespace Drupal\bootstrap_layout_builder;
 
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 
@@ -25,8 +26,8 @@ class LayoutListBuilder extends ConfigEntityListBuilder {
   /**
    * {@inheritdoc}
    */
-  public function getDefaultOperations(EntityInterface $entity) {
-    $operations = parent::getDefaultOperations($entity);
+  public function getDefaultOperations(EntityInterface $entity, ?CacheableMetadata $cacheability = NULL) {
+    $operations = parent::getDefaultOperations($entity, $cacheability);
 
     $operations['list'] = [
       'title' => $this->t('List options'),

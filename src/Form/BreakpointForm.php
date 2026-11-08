@@ -9,7 +9,7 @@ use Drupal\Core\Messenger\MessengerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class BreakpointForm.
+ * Form handler for the breakpoint add and edit forms.
  */
 class BreakpointForm extends EntityForm implements ContainerInjectionInterface {
 
@@ -103,6 +103,7 @@ class BreakpointForm extends EntityForm implements ContainerInjectionInterface {
         ]));
     }
     $form_state->setRedirectUrl($breakpoint->toUrl('collection'));
+    return $save_operation;
   }
 
 }

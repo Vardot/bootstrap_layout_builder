@@ -83,7 +83,7 @@ interface LayoutOptionInterface extends ConfigEntityInterface {
   public function getBreakpointsIds();
 
   /**
-   * Returns array of enabled breakpoints lablels.
+   * Returns array of enabled breakpoints labels.
    *
    * @return array
    *   The breakpoints labels.
