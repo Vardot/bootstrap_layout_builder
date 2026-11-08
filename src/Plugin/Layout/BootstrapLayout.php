@@ -7,7 +7,7 @@ use Drupal\Core\Layout\LayoutDefault;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Serialization\Yaml;
+use Drupal\Component\Serialization\Yaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\bootstrap_styles\StylesGroup\StylesGroupManager;
@@ -183,7 +183,8 @@ class BootstrapLayout extends LayoutDefault implements ContainerFactoryPluginInt
     }
 
     return $default_configuration + [
-      // Container wrapper commonly used on container background and minor styling.
+      // Container wrapper commonly used on container background and minor
+      // styling.
       'container_wrapper_classes' => '',
       'container_wrapper_attributes' => [],
       // Container wrapper.
@@ -330,6 +331,7 @@ class BootstrapLayout extends LayoutDefault implements ContainerFactoryPluginInt
           'title' => $tab['title'],
           'target' => $tab['machine_name'],
           'active' => isset($tab['active']) && $tab['active'] == TRUE ? 'active' : '',
+          // @phpstan-ignore-next-line globalDrupalDependencyInjection.useDependencyInjection
           'icon' => \Drupal::service('extension.list.module')->getPath('bootstrap_styles') . '/images/ui/' . ($tab['icon'] ? $tab['icon'] : 'default.svg'),
         ],
       ];
@@ -419,9 +421,14 @@ class BootstrapLayout extends LayoutDefault implements ContainerFactoryPluginInt
 
         // Check if the live preview enabled.
         if ($this->livePreviewIsEnabled()) {
-          $form['ui']['tab_content']['layout']['breakpoints'][$breakpoint_id]['#ajax']['callback'] = [$this, 'livePreviewCallback'];
+          $form['ui']['tab_content']['layout']['breakpoints'][$breakpoint_id]['#ajax']['callback'] = [
+            $this,
+            'livePreviewCallback',
+          ];
           $form['ui']['tab_content']['layout']['breakpoints'][$breakpoint_id]['#ajax']['event'] = 'click';
-          $form['ui']['tab_content']['layout']['breakpoints'][$breakpoint_id]['#ajax']['progress'] = ['type' => 'none'];
+          $form['ui']['tab_content']['layout']['breakpoints'][$breakpoint_id]['#ajax']['progress'] = [
+            'type' => 'none',
+          ];
         }
       }
     }
@@ -526,7 +533,7 @@ class BootstrapLayout extends LayoutDefault implements ContainerFactoryPluginInt
 
   /**
    * Add live preview to element.
-   * 
+   *
    * @param array $element
    *   The target element.
    */
@@ -568,6 +575,7 @@ class BootstrapLayout extends LayoutDefault implements ContainerFactoryPluginInt
     ];
 
     $data = [];
+    // @phpstan-ignore-next-line globalDrupalDependencyInjection.useDependencyInjection
     $tempstore = \Drupal::service('tempstore.private')->get('bootstrap_styles');
     $data['active_device'] = $tempstore->get('active_device');
 
@@ -590,9 +598,9 @@ class BootstrapLayout extends LayoutDefault implements ContainerFactoryPluginInt
    */
   public function getRegionClasses(int $key, array $breakpoints) {
     $classes = [];
-    foreach ($breakpoints as $breakpoint_id => $strucutre_id) {
+    foreach ($breakpoints as $breakpoint_id => $structure_id) {
       $breakpoint = $this->entityTypeManager->getStorage('blb_breakpoint')->load($breakpoint_id);
-      $classes[] = $breakpoint->getClassByPosition($key, $strucutre_id);
+      $classes[] = $breakpoint->getClassByPosition($key, $structure_id);
     }
     return $classes;
   }
@@ -647,8 +655,10 @@ class BootstrapLayout extends LayoutDefault implements ContainerFactoryPluginInt
 
     // Container classes from advanced mode.
     if (!$this->sectionSettingsIsHidden()) {
-      $this->configuration['container_wrapper_classes'] = $form_state->getValue(array_merge($settings_tab, ['container', 'container_wrapper_classes']));
-      $this->configuration['container_wrapper_attributes'] = Yaml::decode($form_state->getValue(array_merge($settings_tab, ['container', 'container_wrapper_attributes'])));
+      $parents = array_merge($settings_tab, ['container', 'container_wrapper_classes']);
+      $this->configuration['container_wrapper_classes'] = $form_state->getValue($parents);
+      $parents = array_merge($settings_tab, ['container', 'container_wrapper_attributes']);
+      $this->configuration['container_wrapper_attributes'] = Yaml::decode($form_state->getValue($parents));
     }
 
     // Gutter Classes.
@@ -656,8 +666,10 @@ class BootstrapLayout extends LayoutDefault implements ContainerFactoryPluginInt
 
     // Row classes from advanced mode.
     if (!$this->sectionSettingsIsHidden()) {
-      $this->configuration['section_classes'] = $form_state->getValue(array_merge($settings_tab, ['row', 'section_classes']));
-      $this->configuration['section_attributes'] = Yaml::decode($form_state->getValue(array_merge($settings_tab, ['row', 'section_attributes'])));
+      $parents = array_merge($settings_tab, ['row', 'section_classes']);
+      $this->configuration['section_classes'] = $form_state->getValue($parents);
+      $parents = array_merge($settings_tab, ['row', 'section_attributes']);
+      $this->configuration['section_attributes'] = Yaml::decode($form_state->getValue($parents));
     }
 
     $breakpoints = $form_state->getValue(array_merge($layout_tab, ['breakpoints']));
@@ -669,8 +681,10 @@ class BootstrapLayout extends LayoutDefault implements ContainerFactoryPluginInt
         $this->configuration['layout_regions_classes'][$region_name] = $this->getRegionClasses($key, $breakpoints);
         // Cols classes from advanced mode.
         if (!$this->sectionSettingsIsHidden()) {
-          $this->configuration['regions_classes'][$region_name] = $form_state->getValue(array_merge($settings_tab, ['regions', $region_name . '_classes']));
-          $this->configuration['regions_attributes'][$region_name] = Yaml::decode($form_state->getValue(array_merge($settings_tab, ['regions', $region_name . '_attributes'])));
+          $parents = array_merge($settings_tab, ['regions', $region_name . '_classes']);
+          $this->configuration['regions_classes'][$region_name] = $form_state->getValue($parents);
+          $parents = array_merge($settings_tab, ['regions', $region_name . '_attributes']);
+          $this->configuration['regions_attributes'][$region_name] = Yaml::decode($form_state->getValue($parents));
         }
       }
     }
@@ -678,8 +692,10 @@ class BootstrapLayout extends LayoutDefault implements ContainerFactoryPluginInt
       foreach ($this->getPluginDefinition()->getRegionNames() as $key => $region_name) {
         // Cols classes from advanced mode.
         if (!$this->sectionSettingsIsHidden()) {
-          $this->configuration['regions_classes'][$region_name] = $form_state->getValue(array_merge($settings_tab,['regions', $region_name . '_classes']));
-          $this->configuration['regions_attributes'][$region_name] = Yaml::decode($form_state->getValue(array_merge($settings_tab,['regions', $region_name . '_attributes'])));
+          $parents = array_merge($settings_tab, ['regions', $region_name . '_classes']);
+          $this->configuration['regions_classes'][$region_name] = $form_state->getValue($parents);
+          $parents = array_merge($settings_tab, ['regions', $region_name . '_attributes']);
+          $this->configuration['regions_attributes'][$region_name] = Yaml::decode($form_state->getValue($parents));
         }
       }
     }

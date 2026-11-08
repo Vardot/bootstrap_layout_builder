@@ -9,7 +9,7 @@ use Drupal\Core\Messenger\MessengerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class LayoutForm.
+ * Form handler for the layout add and edit forms.
  */
 class LayoutForm extends EntityForm implements ContainerInjectionInterface {
 
@@ -111,6 +111,7 @@ class LayoutForm extends EntityForm implements ContainerInjectionInterface {
         ]));
     }
     $form_state->setRedirectUrl($layout->toUrl('collection'));
+    return $save_operation;
   }
 
 }

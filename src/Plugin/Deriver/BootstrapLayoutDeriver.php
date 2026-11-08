@@ -68,7 +68,7 @@ class BootstrapLayoutDeriver extends DeriverBase implements ContainerDeriverInte
   }
 
   /**
-   * Convert intger to number in letters.
+   * Convert integer to number in letters.
    *
    * @param int $num
    *   The number that needed to be converted.
@@ -95,7 +95,7 @@ class BootstrapLayoutDeriver extends DeriverBase implements ContainerDeriverInte
   }
 
   /**
-   * Get the formated array of row regions based on columns count.
+   * Get the formatted array of row regions based on columns count.
    *
    * @param int $columns_count
    *   The count of row columns.
